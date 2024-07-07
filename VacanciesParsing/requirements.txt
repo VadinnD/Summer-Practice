@@ -1,0 +1,9 @@
+requests~=2.32.3
+# sqlalchemy
+psycopg2-binary
+uvicorn
+beautifulsoup4==4.12.3
+bs4==0.0.2
+telegram~=0.0.1
+
+telebot~=0.0.5

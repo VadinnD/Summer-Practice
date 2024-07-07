@@ -1,0 +1,30 @@
+services:
+  db:
+    build: ./DB
+    image: postgres:latest  # Используем официальный образ PostgreSQL
+    container_name: postgres_db  # Имя контейнера
+    environment:
+      POSTGRES_USER: "postgres"  # Устанавливаем имя пользователя
+      POSTGRES_PASSWORD: "root904"  # Устанавливаем пароль
+      POSTGRES_DB: "VacanciesParser"  # Устанавливаем имя базы данных
+    ports:
+      - "5432:5431"  # Пробрасываем порт PostgreSQL из контейнера на хост
+    volumes:
+      - db_data:/var/lib/postgresql/data  # Монтируем том для хранения данных
+
+  bot:
+    build: .  # Строим образ из Dockerfile
+    container_name: telegram_bot  # Имя контейнера
+    environment:
+      DATABASE_URL: "postgres://postgres:root904@localhost:5431/VacanciesParser"  # URL для подключения к базе данных
+      TELEGRAM_TOKEN: "7428234350:AAEFItZHXZW-k0xw4kLV9zREqfExar_K8PQ"  # Токен вашего Telegram-бота
+    depends_on:
+      - db  # Контейнер бот зависит от контейнера db
+    volumes:
+      - bot_data:/app/data  # Монтируем том для данных бота
+    ports:
+      - "7070:7070"  # Пробрасываем порт (если нужно для доступа к боту)
+
+volumes:
+  db_data:  # Определяем том для хранения данных базы данных
+  bot_data:  # Определяем том для данных бота
